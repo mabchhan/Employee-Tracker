@@ -1,0 +1,19 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Employee-Tracker",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mabchhan/Employee-Tracker.git"
+  },
+  "author": "Mab Chhan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mabchhan/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/mabchhan/Employee-Tracker#readme"
+}
