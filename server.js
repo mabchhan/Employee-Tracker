@@ -43,14 +43,15 @@ function start() {
     .then((answer) => {
       switch (answer.questions) {
         case "View all departments":
-          console.log("View all departments");
+          console.log("View all departments \n");
           viewDepartment();
           start();
           break;
 
         case "View all roles":
-          console.log("View all roles");
-
+          console.log("View all roles \n");
+          viewRole();
+          start();
           break;
 
         case "View all employees":
@@ -80,8 +81,23 @@ function start() {
     });
 }
 
+// view all department
 const viewDepartment = () => {
   const sql = `SELECT * FROM department`;
+  db.query(sql, (err, data) => {
+    if (err) {
+      throw err;
+    } else {
+      console.table(data);
+    }
+  });
+};
+
+// view all role
+const viewRole = () => {
+  const sql = `SELECT role.id, role.title,role.salary,department.name AS department FROM role 
+                JOIN department 
+                ON role.department_id=department.id`;
   db.query(sql, (err, data) => {
     if (err) {
       throw err;
