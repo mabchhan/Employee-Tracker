@@ -43,9 +43,7 @@ function start() {
     .then((answer) => {
       switch (answer.questions) {
         case "View all departments":
-          console.log("View all departments \n");
           viewDepartment();
-          start();
           break;
 
         case "View all roles":
@@ -88,7 +86,9 @@ const viewDepartment = () => {
     if (err) {
       throw err;
     } else {
+      console.log("View all departments \n");
       console.table(data);
+      start();
     }
   });
 };
