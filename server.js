@@ -71,7 +71,7 @@ function start() {
           break;
 
         case "Exit":
-          connection.end();
+          db.end();
           break;
       }
     });
