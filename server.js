@@ -55,7 +55,7 @@ function start() {
           break;
 
         case "View all employees":
-          console.log("View all employees");
+          viewEmployee();
           break;
 
         case "Add a department":
@@ -95,14 +95,31 @@ const viewDepartment = () => {
 
 // view all role
 const viewRole = () => {
-  const sql = `SELECT role.id, role.title,role.salary,department.name AS department FROM role 
+  const sql = `SELECT role.id, role.title, role.salary, department.name AS department FROM role 
                 JOIN department 
-                ON role.department_id=department.id`;
+                ON role.department_id = department.id`;
   db.query(sql, (err, data) => {
     if (err) {
       throw err;
     } else {
       console.table(data);
+    }
+  });
+};
+
+// view all employee
+
+const viewEmployee = () => {
+  const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department 
+                FROM employee
+                JOIN role ON employee.role_id = role.id
+                JOIN department ON role.department_id = department.id`;
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+    else {
+      console.log("View all employees \n");
+      console.table(data);
+      start();
     }
   });
 };
