@@ -39,6 +39,8 @@ function start() {
         "Update employee role",
         "Exit",
       ],
+
+      loop: false,
     })
     .then((answer) => {
       switch (answer.questions) {
@@ -55,7 +57,8 @@ function start() {
           break;
 
         case "Add a department":
-          console.log("Add a department");
+          //console.log("Add a department");
+          addDepartment();
           break;
 
         case "Add a role":
@@ -122,4 +125,32 @@ const viewEmployee = () => {
       start();
     }
   });
+};
+
+// add department
+
+const addDepartment = () => {
+  inquirer
+    .prompt({
+      name: "department",
+      type: "input",
+      message: "What department do you want to add? ",
+      validate: (department) => {
+        if (department) return true;
+        else {
+          console.log("Please input new department");
+          return false;
+        }
+      },
+    })
+    .then((answer) => {
+      const sql = `INSERT INTO department (name) VALUES (?)`;
+      db.query(sql, answer.department, (err, data) => {
+        if (err) throw err;
+        else {
+          console.log(`new department has been added.`);
+          viewDepartment();
+        }
+      });
+    });
 };
