@@ -62,7 +62,7 @@ function start() {
           break;
 
         case "Add a role":
-          console.log("Add a role");
+          addRole();
           break;
 
         case "Add an employee":
@@ -150,6 +150,77 @@ const addDepartment = () => {
         else {
           console.log(`new department has been added.`);
           viewDepartment();
+        }
+      });
+    });
+};
+
+// add role
+
+const addRole = () => {
+  inquirer
+    .prompt([
+      {
+        name: "role",
+        type: "input",
+        message: "What role do you want to add? ",
+        validate: (role) => {
+          if (role) return true;
+          else {
+            console.log("Please input new role");
+            return false;
+          }
+        },
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is salary? ",
+        validate: (salary) => {
+          if (salary) return true;
+          else {
+            console.log("Please input salary");
+            return false;
+          }
+        },
+      },
+    ])
+    .then((answer) => {
+      // console.log(answer);
+      const param = [answer.role, answer.salary];
+      // console.log(param);
+      const sql = `SELECT * FROM department`;
+      db.query(sql, (err, data) => {
+        //console.log(data);
+        if (err) {
+          throw err;
+        } else {
+          // console.log(data);
+          inquirer
+            .prompt({
+              name: "department",
+              type: "list",
+              message: "What department do you want to add for this role? ",
+              choices: data,
+            })
+            .then((listAnswer) => {
+              let idChoice;
+              for (let i = 0; i < data.length; i++) {
+                if (data[i].name === listAnswer.department) {
+                  idChoice = data[i].id;
+                }
+              }
+              param.push(idChoice);
+              const sql = `INSERT INTO role (title, salary, department_id) VALUES (?,?,?)`;
+              //console.log(param);
+              db.query(sql, param, (err, data) => {
+                if (err) throw err;
+                else {
+                  console.log(`new role has been added.`);
+                  viewRole();
+                }
+              });
+            });
         }
       });
     });
