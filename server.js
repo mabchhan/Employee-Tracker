@@ -37,6 +37,7 @@ function start() {
         "Add a role",
         "Add an employee",
         "Update employee role",
+        "Delete department",
         "Exit",
       ],
 
@@ -71,6 +72,10 @@ function start() {
 
         case "Update employee role":
           console.log("Update employee role");
+          break;
+
+        case "Delete department":
+          deleteDepartment();
           break;
 
         case "Exit":
@@ -224,4 +229,40 @@ const addRole = () => {
         }
       });
     });
+};
+
+// function to delete department
+const deleteDepartment = () => {
+  const sql = `SELECT * FROM department`;
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+    else {
+      //const dept = data.map(({ name, id }) => ({ name: name, value: id }));
+
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "department",
+            message: "What department do you want to delete?",
+            choices: data,
+          },
+        ])
+        .then((selectedDepartment) => {
+          let selectID;
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].name === selectedDepartment.department) {
+              selectID = data[i].id;
+            }
+          }
+          const sql = `DELETE FROM department WHERE id = ?`;
+
+          db.query(sql, selectID, (err, result) => {
+            if (err) throw err;
+            console.log("\n Successfully deleted!");
+            viewDepartment();
+          });
+        });
+    }
+  });
 };
