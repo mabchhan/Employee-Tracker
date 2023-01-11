@@ -47,9 +47,7 @@ function start() {
           break;
 
         case "View all roles":
-          console.log("View all roles \n");
           viewRole();
-          start();
           break;
 
         case "View all employees":
@@ -102,7 +100,9 @@ const viewRole = () => {
     if (err) {
       throw err;
     } else {
+      console.log("View all roles \n");
       console.table(data);
+      start();
     }
   });
 };
