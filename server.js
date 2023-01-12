@@ -38,6 +38,7 @@ function start() {
         "Add an employee",
         "Update employee role",
         "Delete department",
+        "Delete role",
         "Exit",
       ],
 
@@ -76,6 +77,10 @@ function start() {
 
         case "Delete department":
           deleteDepartment();
+          break;
+
+        case "Delete role":
+          deleteRole();
           break;
 
         case "Exit":
@@ -118,7 +123,7 @@ const viewRole = () => {
 // view all employee
 
 const viewEmployee = () => {
-  const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department 
+  const sql = `SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.name AS department
                 FROM employee
                 JOIN role ON employee.role_id = role.id
                 JOIN department ON role.department_id = department.id`;
@@ -232,13 +237,12 @@ const addRole = () => {
 };
 
 // function to delete department
+
 const deleteDepartment = () => {
   const sql = `SELECT * FROM department`;
   db.query(sql, (err, data) => {
     if (err) throw err;
     else {
-      //const dept = data.map(({ name, id }) => ({ name: name, value: id }));
-
       inquirer
         .prompt([
           {
@@ -261,6 +265,48 @@ const deleteDepartment = () => {
             if (err) throw err;
             console.log("\n Successfully deleted!");
             viewDepartment();
+          });
+        });
+    }
+  });
+};
+
+// function to delete role
+
+const deleteRole = () => {
+  const sql = `SELECT * FROM role`;
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+    else {
+      //console.log(data);
+      const roleTitle = data.map(({ title, id }) => ({
+        name: title,
+        value: id,
+      }));
+
+      // console.log(roleTitle);
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "role",
+            message: "What role do you want to delete?",
+            choices: roleTitle,
+          },
+        ])
+        .then((selectedRole) => {
+          //console.log(selectedRole.role);
+          // let selectID;
+          // for (let i = 0; i < roleTitle.length; i++) {
+          //   if (roleTitle[i].name === selectedRole.role) {
+          //     selectID = roleTitle[i].id;
+          //   }
+          // }
+          const sql = `DELETE FROM role WHERE id = ?`;
+          db.query(sql, selectedRole.role, (err) => {
+            if (err) throw err;
+            console.log("\n Successfully deleted!");
+            viewRole();
           });
         });
     }
