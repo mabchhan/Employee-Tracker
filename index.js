@@ -315,7 +315,7 @@ const addEmployee = () => {
                       const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id)
                       VALUES (?, ?, ?, ?)`;
 
-                      db.query(sql, params, (err, data) => {
+                      db.query(sql, params, (err) => {
                         if (err) throw err;
                         console.log("Employee has been added!");
 
