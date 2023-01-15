@@ -73,7 +73,8 @@ function start() {
           break;
 
         case "Update employee role":
-          console.log("Update employee role");
+          // console.log("Update employee role");
+          updateEmployeeRole();
           break;
 
         case "Delete department":
@@ -327,6 +328,71 @@ const addEmployee = () => {
         }
       });
     });
+};
+
+// function update employee role
+const updateEmployeeRole = () => {
+  const sql = `SELECT * FROM employee`;
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+    else {
+      const employeeList = data.map(({ id, first_name, last_name }) => ({
+        name: first_name + " " + last_name,
+        value: id,
+      }));
+
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "employeeList",
+            message: "Which employee do you want to update role?",
+            choices: employeeList,
+          },
+        ])
+        .then((selectedEmployee) => {
+          //console.log(selectedEmployee.addManager);
+          const params = [selectedEmployee.employeeList];
+
+          const sql = `SELECT * FROM role`;
+          db.query(sql, (err, data) => {
+            if (err) throw err;
+            else {
+              const roleList = data.map(({ id, title }) => ({
+                name: title,
+                value: id,
+              }));
+              inquirer
+                .prompt([
+                  {
+                    type: "list",
+                    name: "roleTitle",
+                    message: "What is the employee's new role?",
+                    choices: roleList,
+                  },
+                ])
+                .then((selectedRole) => {
+                  params.push(selectedRole.roleTitle);
+                  // console.log(params);
+
+                  [params[0], params[1]] = [params[1], params[0]];
+
+                  // console.log("after :");
+                  // console.log(params);
+                  const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+
+                  db.query(sql, params, (err) => {
+                    if (err) throw err;
+                    console.log("Employee has been updated!");
+
+                    viewEmployee();
+                  });
+                });
+            }
+          });
+        });
+    }
+  });
 };
 
 // function to delete department
