@@ -10,7 +10,7 @@ VALUES
 ('Full Stack Developer', 100000, 1),
 ('Software Engineer', 120000, 1),
 ('Accountant', 50000, 2), 
-('Finanical Analyst', 150000, 2),
+('Financial Analyst', 150000, 2),
 ('Marketing Coordindator', 70000, 3), 
 ('Sales Lead', 90000, 3),
 ('Project Manager', 130000, 4),
