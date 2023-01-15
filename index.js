@@ -37,12 +37,13 @@ function start() {
         "Add a role",
         "Add an employee",
         "Update employee role",
+        "Delete employee",
         "Delete department",
         "Delete role",
         "Exit",
       ],
 
-      loop: false,
+      //loop: false,
     })
     .then((answer) => {
       switch (answer.questions) {
@@ -75,6 +76,10 @@ function start() {
         case "Update employee role":
           // console.log("Update employee role");
           updateEmployeeRole();
+          break;
+
+        case "Delete employee":
+          deleteEmployee();
           break;
 
         case "Delete department":
@@ -389,6 +394,41 @@ const updateEmployeeRole = () => {
                   });
                 });
             }
+          });
+        });
+    }
+  });
+};
+
+// function delete employee
+
+const deleteEmployee = () => {
+  const sql = `SELECT * FROM employee`;
+  db.query(sql, (err, data) => {
+    if (err) throw err;
+    else {
+      //console.log(data);
+      const employeeList = data.map(({ id, first_name, last_name }) => ({
+        name: first_name + " " + last_name,
+        value: id,
+      }));
+
+      // console.log(employeeList);
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "role",
+            message: "Which employee do you want to delete?",
+            choices: employeeList,
+          },
+        ])
+        .then((selectedEmployee) => {
+          const sql = `DELETE FROM employee WHERE id = ?`;
+          db.query(sql, selectedEmployee.role, (err) => {
+            if (err) throw err;
+            console.log("\n Successfully deleted!");
+            viewEmployee();
           });
         });
     }
