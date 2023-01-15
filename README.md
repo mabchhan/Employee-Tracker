@@ -25,3 +25,7 @@ This project is license under MIT.
 - Link to Github
 
   - https://github.com/mabchhan/Employee-Tracker
+
+- Link to Video
+
+  - https://drive.google.com/file/d/1lpkDMtbi_FwKI_l0eykUPmmb7WinkQFo/view?usp=sharing
